@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "options": {
+    "statuses": [
+      "待投递",
+      "已投递",
+      "笔试",
+      "一面",
+      "二面",
+      "HR 面",
+      "Offer",
+      "已拒绝",
+      "已结束"
+    ],
+    "channels": [
+      "官网",
+      "内推",
+      "Boss 直聘",
+      "猎聘",
+      "实习僧",
+      "公众号 / 校招群",
+      "其他"
+    ],
+    "locations": [
+      "北京",
+      "上海",
+      "广州",
+      "深圳",
+      "杭州",
+      "南京",
+      "成都",
+      "武汉",
+      "西安",
+      "苏州",
+      "远程",
+      "其他"
+    ]
+  },
+  "applications": [
+    {
+      "id": "a4c6411e-7ee6-49c0-bd80-6e6804d63abe",
+      "company": "OPPO",
+      "role": "AI 应用开发工程师",
+      "location": "北京",
+      "appliedDate": "2026-09-14",
+      "channel": "官网",
+      "status": "已投递",
+      "nextDate": "",
+      "url": "",
+      "notes": "",
+      "createdAt": "2026-09-14T10:45:16.927Z",
+      "updatedAt": "2026-09-14T10:45:21.415Z"
+    },
+    {
+      "id": "f411aa4b-c064-415e-b6c5-67ceeb5dab88",
+      "company": "字节跳动",
+      "role": "后端开发工程师",
+      "location": "北京",
+      "appliedDate": "2026-09-14",
+      "channel": "官网",
+      "status": "一面",
+      "nextDate": "",
+      "url": "",
+      "notes": "",
+      "createdAt": "2026-09-14T10:47:00.355Z",
+      "updatedAt": "2026-09-14T10:48:07.125Z"
+    },
+    {
+      "id": "d1f9ba01-86a6-4752-a32e-202491067a2a",
+      "company": "VIVO",
+      "role": "Agent开发工程师",
+      "location": "北京",
+      "appliedDate": "2026-09-14",
+      "channel": "官网",
+      "status": "已投递",
+      "nextDate": "",
+      "url": "",
+      "notes": "",
+      "createdAt": "2026-09-14T10:48:46.483Z",
+      "updatedAt": "2026-09-14T10:48:46.483Z"
+    }
+  ]
+}

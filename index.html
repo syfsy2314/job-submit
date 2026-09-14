@@ -1,0 +1,1216 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>秋招投递 · 本地管理</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --surface-2: #f8fafc;
+      --text: #172033;
+      --muted: #667085;
+      --border: #e4e8ef;
+      --primary: #4f46e5;
+      --primary-2: #4338ca;
+      --primary-soft: #eef2ff;
+      --success: #16835f;
+      --success-soft: #eaf8f2;
+      --warning: #b54708;
+      --warning-soft: #fff4e5;
+      --danger: #c0362c;
+      --danger-soft: #fff0ef;
+      --shadow: 0 16px 40px rgba(31, 42, 68, .08);
+      --radius: 18px;
+      --radius-sm: 11px;
+      --font: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1420;
+        --surface: #171e2c;
+        --surface-2: #111827;
+        --text: #f2f4f7;
+        --muted: #a6adbb;
+        --border: #2b3445;
+        --primary: #818cf8;
+        --primary-2: #a5b4fc;
+        --primary-soft: #25284c;
+        --success: #61c7a4;
+        --success-soft: #173a31;
+        --warning: #f5b86b;
+        --warning-soft: #402e1b;
+        --danger: #ff8d86;
+        --danger-soft: #44221f;
+        --shadow: 0 18px 44px rgba(0, 0, 0, .22);
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 12% -8%, color-mix(in srgb, var(--primary) 13%, transparent), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    button, input, select, textarea { font: inherit; }
+    button, select { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--primary) 28%, transparent);
+      outline-offset: 2px;
+    }
+
+    .app-shell { width: min(1520px, 100%); margin: 0 auto; padding: 28px clamp(16px, 3vw, 44px) 52px; }
+    .topbar { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+    .eyebrow { margin: 0 0 6px; color: var(--primary); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(25px, 3.2vw, 38px); line-height: 1.18; letter-spacing: -.025em; }
+    .subtitle { margin: 8px 0 0; color: var(--muted); }
+    .file-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+    .file-status { display: inline-flex; align-items: center; gap: 7px; min-height: 38px; padding: 0 12px; border: 1px solid var(--border); border-radius: 999px; background: color-mix(in srgb, var(--surface) 85%, transparent); color: var(--muted); white-space: nowrap; }
+    .file-status strong { max-width: 150px; overflow: hidden; text-overflow: ellipsis; font-weight: 600; color: var(--text); }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex: 0 0 auto; }
+    .file-status[data-state="saved"] .status-dot { background: var(--success); box-shadow: 0 0 0 4px color-mix(in srgb, var(--success) 14%, transparent); }
+    .file-status[data-state="saving"] .status-dot { background: var(--warning); animation: pulse 1s infinite; }
+    .file-status[data-state="error"] .status-dot { background: var(--danger); }
+    @keyframes pulse { 50% { opacity: .38; } }
+
+    .btn {
+      min-height: 38px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 13px;
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .btn:hover { border-color: color-mix(in srgb, var(--primary) 50%, var(--border)); background: var(--surface-2); }
+    .btn:active { transform: translateY(1px); }
+    .btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-2); border-color: var(--primary-2); }
+    .btn-ghost { background: transparent; }
+    .btn-danger { color: var(--danger); }
+    .btn-small { min-height: 30px; padding: 4px 9px; font-size: 13px; }
+    .icon-btn { width: 32px; min-height: 32px; padding: 0; display: inline-grid; place-items: center; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .stat { padding: 18px 19px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); box-shadow: 0 10px 26px rgba(25, 34, 58, .04); }
+    .stat-label { color: var(--muted); font-size: 13px; }
+    .stat-value { margin-top: 4px; font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -.03em; }
+    .stat:nth-child(2) .stat-value { color: var(--primary); }
+    .stat:nth-child(3) .stat-value { color: var(--warning); }
+    .stat:nth-child(4) .stat-value { color: var(--success); }
+
+    .workspace { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
+    .toolbar { padding: 16px 18px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+    .search-wrap { position: relative; flex: 1 1 230px; }
+    .search-wrap::before { content: "⌕"; position: absolute; left: 12px; top: 50%; transform: translateY(-52%); color: var(--muted); font-size: 20px; pointer-events: none; }
+    .control { width: 100%; min-height: 38px; border: 1px solid var(--border); border-radius: 10px; padding: 8px 11px; background: var(--surface); color: var(--text); }
+    .search-wrap .control { padding-left: 38px; }
+    select.control { width: auto; min-width: 118px; }
+    textarea.control { min-height: 90px; resize: vertical; }
+    .toolbar-spacer { flex: 1 1 12px; }
+    .view-switch { display: inline-flex; padding: 3px; border-radius: 11px; background: var(--surface-2); border: 1px solid var(--border); }
+    .view-switch button { min-height: 30px; padding: 4px 11px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-weight: 600; }
+    .view-switch button.active { background: var(--surface); color: var(--primary); box-shadow: 0 2px 8px rgba(31, 42, 68, .08); }
+
+    .content-area { min-height: 360px; }
+    .table-wrap { width: 100%; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; min-width: 1030px; }
+    th { padding: 12px 14px; color: var(--muted); background: var(--surface-2); font-size: 12px; text-align: left; white-space: nowrap; font-weight: 600; }
+    td { padding: 13px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
+    tbody tr:hover { background: color-mix(in srgb, var(--primary-soft) 40%, transparent); }
+    .company-cell { min-width: 185px; }
+    .company-name { font-weight: 700; }
+    .role-name { color: var(--muted); margin-top: 2px; font-size: 13px; }
+    .cell-muted { color: var(--muted); white-space: nowrap; }
+    .inline-select { min-height: 32px; max-width: 130px; border: 1px solid var(--border); border-radius: 8px; padding: 4px 24px 4px 8px; background: var(--surface); color: var(--text); }
+    .row-actions { display: flex; gap: 5px; white-space: nowrap; }
+    .link { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .link:hover { text-decoration: underline; }
+
+    .empty { min-height: 350px; display: grid; place-items: center; padding: 42px 18px; text-align: center; }
+    .empty-icon { width: 58px; height: 58px; margin: 0 auto 14px; display: grid; place-items: center; border-radius: 18px; background: var(--primary-soft); color: var(--primary); font-size: 27px; }
+    .empty h2 { margin: 0; font-size: 18px; }
+    .empty p { max-width: 420px; margin: 7px auto 18px; color: var(--muted); }
+
+    .kanban { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 285px); gap: 14px; padding: 18px; overflow-x: auto; align-items: start; }
+    .kanban-column { min-height: 270px; padding: 12px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--border); }
+    .kanban-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 11px; font-weight: 700; }
+    .count { display: inline-grid; min-width: 24px; height: 24px; place-items: center; padding: 0 6px; border-radius: 999px; background: var(--surface); color: var(--muted); font-size: 12px; border: 1px solid var(--border); }
+    .kanban-list { display: grid; gap: 9px; }
+    .job-card { padding: 13px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 6px 14px rgba(31, 42, 68, .04); }
+    .job-card-title { font-weight: 700; }
+    .job-card-role { color: var(--muted); margin: 2px 0 10px; }
+    .job-meta { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 10px; color: var(--muted); font-size: 12px; }
+    .chip { display: inline-flex; align-items: center; padding: 3px 7px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); }
+    .job-card-footer { display: flex; align-items: center; gap: 7px; }
+    .job-card-footer select { flex: 1; min-width: 0; }
+
+    dialog { width: min(680px, calc(100% - 28px)); max-height: calc(100vh - 40px); padding: 0; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); color: var(--text); box-shadow: 0 28px 80px rgba(0, 0, 0, .28); }
+    dialog::backdrop { background: rgba(10, 15, 28, .48); backdrop-filter: blur(4px); }
+    .dialog-head { padding: 19px 22px 13px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .dialog-head h2 { margin: 0; font-size: 20px; }
+    .dialog-body { padding: 8px 22px 20px; overflow-y: auto; }
+    .dialog-footer { display: flex; justify-content: flex-end; gap: 9px; padding: 14px 22px 20px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .field { display: grid; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { font-size: 13px; color: var(--muted); font-weight: 600; }
+    .required::after { content: " *"; color: var(--danger); }
+    .form-error { min-height: 20px; margin-top: 8px; color: var(--danger); font-size: 13px; }
+
+    .settings-section + .settings-section { margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .settings-title { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+    .settings-title h3 { margin: 0; font-size: 15px; }
+    .settings-title span { color: var(--muted); font-size: 12px; }
+    .option-list { display: grid; gap: 8px; }
+    .option-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; align-items: center; gap: 6px; }
+    .option-add { display: flex; gap: 8px; margin-top: 10px; }
+    .option-add input { flex: 1; }
+
+    .toast-stack { position: fixed; right: 18px; bottom: 18px; z-index: 100; display: grid; gap: 8px; pointer-events: none; }
+    .toast { max-width: min(370px, calc(100vw - 36px)); padding: 11px 14px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface); color: var(--text); box-shadow: var(--shadow); animation: toast-in .2s ease; }
+    .toast.error { border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); color: var(--danger); }
+    @keyframes toast-in { from { opacity: 0; transform: translateY(7px); } }
+    .hidden { display: none !important; }
+
+    @media (max-width: 900px) {
+      .topbar { flex-direction: column; }
+      .file-actions { justify-content: flex-start; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 620px) {
+      .app-shell { padding: 19px 12px 36px; }
+      .topbar { margin-bottom: 19px; }
+      .file-actions { width: 100%; }
+      .file-status { width: 100%; justify-content: center; }
+      .file-actions .btn { flex: 1; }
+      .stats { gap: 9px; }
+      .stat { padding: 14px; }
+      .stat-value { font-size: 24px; }
+      .toolbar { padding: 12px; }
+      .toolbar > select.control { flex: 1 1 120px; min-width: 0; }
+      .toolbar-spacer { display: none; }
+      .view-switch { flex: 1; }
+      .view-switch button { flex: 1; }
+      #add-btn { flex: 1; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .dialog-head, .dialog-body, .dialog-footer { padding-left: 16px; padding-right: 16px; }
+      .option-row { grid-template-columns: minmax(0, 1fr) auto auto; }
+      .option-row .delete-option { grid-column: 2 / 4; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">AUTUMN RECRUITMENT</p>
+        <h1>秋招投递管理</h1>
+        <p class="subtitle">把每一次投递和下一步安排，都放在一个清晰的地方。</p>
+      </div>
+      <div class="file-actions" aria-label="数据文件操作">
+        <div id="file-status" class="file-status" data-state="idle" role="status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <strong id="file-name">尚未连接数据文件</strong>
+          <span id="save-label">未保存</span>
+        </div>
+        <button id="open-file-btn" class="btn" type="button">打开数据</button>
+        <button id="new-file-btn" class="btn" type="button">新建数据</button>
+        <button id="save-btn" class="btn btn-ghost" type="button">立即保存</button>
+        <button id="backup-btn" class="btn btn-ghost" type="button">另存备份</button>
+      </div>
+    </header>
+
+    <section class="stats" aria-label="投递概览">
+      <article class="stat"><div class="stat-label">全部记录</div><div id="stat-total" class="stat-value">0</div></article>
+      <article class="stat"><div class="stat-label">进行中</div><div id="stat-active" class="stat-value">0</div></article>
+      <article class="stat"><div class="stat-label">面试阶段</div><div id="stat-interview" class="stat-value">0</div></article>
+      <article class="stat"><div class="stat-label">Offer</div><div id="stat-offer" class="stat-value">0</div></article>
+    </section>
+
+    <section class="workspace" aria-label="投递记录">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <label class="hidden" for="search-input">搜索公司、岗位或备注</label>
+          <input id="search-input" class="control" type="search" placeholder="搜索公司、岗位或备注">
+        </div>
+        <label class="hidden" for="status-filter">筛选进展</label>
+        <select id="status-filter" class="control"><option value="">全部进展</option></select>
+        <label class="hidden" for="channel-filter">筛选渠道</label>
+        <select id="channel-filter" class="control"><option value="">全部渠道</option></select>
+        <label class="hidden" for="location-filter">筛选地点</label>
+        <select id="location-filter" class="control"><option value="">全部地点</option></select>
+        <label class="hidden" for="sort-select">排序方式</label>
+        <select id="sort-select" class="control">
+          <option value="updated-desc">最近更新</option>
+          <option value="applied-desc">投递日期 ↓</option>
+          <option value="applied-asc">投递日期 ↑</option>
+          <option value="company-asc">公司名称</option>
+        </select>
+        <button id="clear-filter-btn" class="btn btn-ghost btn-small" type="button">清除筛选</button>
+        <span class="toolbar-spacer"></span>
+        <div class="view-switch" aria-label="切换视图">
+          <button id="table-view-btn" class="active" type="button" aria-pressed="true">表格</button>
+          <button id="kanban-view-btn" type="button" aria-pressed="false">看板</button>
+        </div>
+        <button id="settings-btn" class="btn" type="button">选项设置</button>
+        <button id="add-btn" class="btn btn-primary" type="button">＋ 新增投递</button>
+      </div>
+
+      <div id="content-area" class="content-area">
+        <div id="empty-state" class="empty">
+          <div>
+            <div class="empty-icon" aria-hidden="true">↗</div>
+            <h2>从第一条投递开始</h2>
+            <p>打开已有 JSON 数据，或新建一个数据文件。之后的更改会自动保存到本地。</p>
+            <button id="empty-open-btn" class="btn btn-primary" type="button">打开数据文件</button>
+          </div>
+        </div>
+        <div id="table-view" class="table-wrap hidden">
+          <table>
+            <thead>
+              <tr>
+                <th>公司 / 岗位</th><th>地点</th><th>投递日期</th><th>渠道</th><th>进展</th><th>下一步</th><th>链接</th><th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="application-body"></tbody>
+          </table>
+        </div>
+        <div id="kanban-view" class="kanban hidden"></div>
+      </div>
+    </section>
+  </main>
+
+  <input id="fallback-file-input" class="hidden" type="file" accept="application/json,.json">
+
+  <dialog id="edit-dialog" aria-labelledby="edit-dialog-title">
+    <form id="application-form">
+      <div class="dialog-head">
+        <h2 id="edit-dialog-title">新增投递</h2>
+        <button class="btn btn-ghost icon-btn close-dialog" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="dialog-body">
+        <input id="record-id" type="hidden">
+        <div class="form-grid">
+          <div class="field"><label class="required" for="company-input">公司</label><input id="company-input" class="control" required maxlength="80" placeholder="例如：某某科技"></div>
+          <div class="field"><label class="required" for="role-input">岗位</label><input id="role-input" class="control" required maxlength="100" placeholder="例如：前端开发工程师"></div>
+          <div class="field"><label for="location-input">地点</label><select id="location-input" class="control"></select></div>
+          <div class="field"><label for="applied-date-input">投递日期</label><input id="applied-date-input" class="control" type="date"></div>
+          <div class="field"><label for="channel-input">投递渠道</label><select id="channel-input" class="control"></select></div>
+          <div class="field"><label for="status-input">当前进展</label><select id="status-input" class="control"></select></div>
+          <div class="field"><label for="next-date-input">下一步日期</label><input id="next-date-input" class="control" type="date"></div>
+          <div class="field"><label for="url-input">招聘链接</label><input id="url-input" class="control" type="url" maxlength="500" placeholder="https://"></div>
+          <div class="field full"><label for="notes-input">备注</label><textarea id="notes-input" class="control" maxlength="2000" placeholder="记录联系人、面试重点、待办事项等"></textarea></div>
+        </div>
+        <div id="form-error" class="form-error" role="alert"></div>
+      </div>
+      <div class="dialog-footer">
+        <button class="btn close-dialog" type="button">取消</button>
+        <button class="btn btn-primary" type="submit">保存记录</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settings-dialog" aria-labelledby="settings-dialog-title">
+    <div class="dialog-head">
+      <h2 id="settings-dialog-title">下拉选项设置</h2>
+      <button class="btn btn-ghost icon-btn close-dialog" type="button" aria-label="关闭">×</button>
+    </div>
+    <div id="settings-body" class="dialog-body"></div>
+    <div class="dialog-footer"><button class="btn btn-primary close-dialog" type="button">完成</button></div>
+  </dialog>
+
+  <dialog id="replace-dialog" aria-labelledby="replace-dialog-title">
+    <form id="replace-form">
+      <div class="dialog-head"><h2 id="replace-dialog-title">替换已使用的选项</h2></div>
+      <div class="dialog-body">
+        <p id="replace-description" class="subtitle"></p>
+        <div class="field"><label for="replacement-select">替换为</label><select id="replacement-select" class="control"></select></div>
+      </div>
+      <div class="dialog-footer">
+        <button id="replace-cancel-btn" class="btn" type="button">取消</button>
+        <button class="btn btn-primary" type="submit">替换并删除</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+  <script>
+    "use strict";
+
+    const DEFAULT_OPTIONS = {
+      statuses: ["待投递", "已投递", "笔试", "一面", "二面", "HR 面", "Offer", "已拒绝", "已结束"],
+      channels: ["官网", "内推", "Boss 直聘", "猎聘", "实习僧", "公众号 / 校招群", "其他"],
+      locations: ["北京", "上海", "广州", "深圳", "杭州", "南京", "成都", "武汉", "西安", "苏州", "远程", "其他"]
+    };
+
+    const state = {
+      data: createEmptyData(),
+      fileHandle: null,
+      fileName: "",
+      connected: false,
+      pendingHandle: null,
+      dirty: false,
+      view: "table",
+      replacement: null,
+      saveTimer: null,
+      writeQueue: Promise.resolve()
+    };
+
+    const els = {};
+    const $ = (id) => document.getElementById(id);
+
+    function createEmptyData() {
+      return {
+        version: 1,
+        options: structuredClone(DEFAULT_OPTIONS),
+        applications: []
+      };
+    }
+
+    function today() {
+      const now = new Date();
+      const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    function uid() {
+      return crypto.randomUUID ? crypto.randomUUID() : `job-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    }
+
+    function cleanText(value, max = 2000) {
+      return String(value ?? "").trim().slice(0, max);
+    }
+
+    function validateAndNormalize(raw) {
+      if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw new Error("数据文件不是有效的对象结构。");
+      if (raw.version !== 1) throw new Error(`不支持的数据版本：${raw.version ?? "未标明"}。`);
+      if (!raw.options || typeof raw.options !== "object" || !Array.isArray(raw.applications)) throw new Error("数据文件缺少 options 或 applications。");
+
+      const options = {};
+      for (const key of ["statuses", "channels", "locations"]) {
+        if (!Array.isArray(raw.options[key])) throw new Error(`选项 ${key} 的格式不正确。`);
+        options[key] = [...new Set(raw.options[key].map(v => cleanText(v, 50)).filter(Boolean))];
+        if (!options[key].length) options[key] = [...DEFAULT_OPTIONS[key]];
+      }
+
+      const seenIds = new Set();
+      const applications = raw.applications.map((item, index) => {
+        if (!item || typeof item !== "object") throw new Error(`第 ${index + 1} 条投递记录格式不正确。`);
+        const company = cleanText(item.company, 80);
+        const role = cleanText(item.role, 100);
+        if (!company || !role) throw new Error(`第 ${index + 1} 条记录缺少公司或岗位。`);
+        const location = cleanText(item.location, 50);
+        const channel = cleanText(item.channel, 50);
+        const status = cleanText(item.status, 50) || options.statuses[0];
+        if (location && !options.locations.includes(location)) options.locations.push(location);
+        if (channel && !options.channels.includes(channel)) options.channels.push(channel);
+        if (status && !options.statuses.includes(status)) options.statuses.push(status);
+        let id = cleanText(item.id, 100) || uid();
+        if (seenIds.has(id)) id = uid();
+        seenIds.add(id);
+        return {
+          id,
+          company,
+          role,
+          location,
+          appliedDate: normalizeDate(item.appliedDate),
+          channel,
+          status,
+          nextDate: normalizeDate(item.nextDate),
+          url: cleanText(item.url, 500),
+          notes: cleanText(item.notes, 2000),
+          createdAt: normalizeTimestamp(item.createdAt),
+          updatedAt: normalizeTimestamp(item.updatedAt)
+        };
+      });
+      return { version: 1, options, applications };
+    }
+
+    function normalizeDate(value) {
+      const text = cleanText(value, 10);
+      return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : "";
+    }
+
+    function normalizeTimestamp(value) {
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? new Date().toISOString() : date.toISOString();
+    }
+
+    function cacheElements() {
+      ["file-status", "file-name", "save-label", "open-file-btn", "new-file-btn", "save-btn", "backup-btn",
+        "stat-total", "stat-active", "stat-interview", "stat-offer", "search-input", "status-filter", "channel-filter",
+        "location-filter", "sort-select", "clear-filter-btn", "table-view-btn", "kanban-view-btn", "settings-btn", "add-btn",
+        "empty-state", "empty-open-btn", "table-view", "kanban-view", "application-body", "fallback-file-input", "edit-dialog",
+        "application-form", "edit-dialog-title", "record-id", "company-input", "role-input", "location-input", "applied-date-input",
+        "channel-input", "status-input", "next-date-input", "url-input", "notes-input", "form-error", "settings-dialog",
+        "settings-body", "replace-dialog", "replace-form", "replace-description", "replacement-select", "replace-cancel-btn", "toast-stack"
+      ].forEach(id => els[id] = $(id));
+    }
+
+    function bindEvents() {
+      els["open-file-btn"].addEventListener("click", openDataFile);
+      els["new-file-btn"].addEventListener("click", createDataFile);
+      els["save-btn"].addEventListener("click", saveNow);
+      els["backup-btn"].addEventListener("click", saveBackup);
+      els["add-btn"].addEventListener("click", () => openEditDialog());
+      els["settings-btn"].addEventListener("click", openSettings);
+      els["table-view-btn"].addEventListener("click", () => setView("table"));
+      els["kanban-view-btn"].addEventListener("click", () => setView("kanban"));
+      els["clear-filter-btn"].addEventListener("click", clearFilters);
+      ["search-input", "status-filter", "channel-filter", "location-filter", "sort-select"].forEach(id => {
+        els[id].addEventListener(id === "search-input" ? "input" : "change", renderRecords);
+      });
+      els["application-form"].addEventListener("submit", submitApplication);
+      els["fallback-file-input"].addEventListener("change", importFallbackFile);
+      document.querySelectorAll(".close-dialog").forEach(button => button.addEventListener("click", () => button.closest("dialog").close()));
+      els["replace-cancel-btn"].addEventListener("click", () => els["replace-dialog"].close());
+      els["replace-form"].addEventListener("submit", applyReplacement);
+      window.addEventListener("beforeunload", event => {
+        if (state.dirty) {
+          event.preventDefault();
+          event.returnValue = "";
+        }
+      });
+    }
+
+    async function init() {
+      cacheElements();
+      bindEvents();
+      renderAll();
+      if (!("showOpenFilePicker" in window)) {
+        toast("当前环境不能直接写回文件，将使用导入和下载保存模式。", "error", 6000);
+      }
+      await restoreFileHandle();
+    }
+
+    async function openDataFile() {
+      if (!("showOpenFilePicker" in window)) {
+        els["fallback-file-input"].value = "";
+        els["fallback-file-input"].click();
+        return;
+      }
+      try {
+        if (state.pendingHandle) {
+          const permission = await state.pendingHandle.requestPermission({ mode: "readwrite" });
+          const handle = state.pendingHandle;
+          state.pendingHandle = null;
+          await loadFromHandle(handle);
+          await rememberHandle(handle);
+          if (permission === "granted") {
+            toast("已重新连接上次的数据文件。");
+          } else {
+            setFileStatus("idle", "点击立即保存以授权");
+            toast("数据已打开；需要写入时请点击“立即保存”授权。", "", 5200);
+          }
+          return;
+        }
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ description: "秋招投递 JSON", accept: { "application/json": [".json"] } }],
+          multiple: false
+        });
+        const permission = await handle.requestPermission({ mode: "readwrite" });
+        await loadFromHandle(handle);
+        await rememberHandle(handle);
+        if (permission === "granted") {
+          toast("数据文件已打开。");
+        } else {
+          setFileStatus("idle", "点击立即保存以授权");
+          toast("数据已打开；需要写入时请点击“立即保存”授权。", "", 5200);
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") showError(error);
+      }
+    }
+
+    async function createDataFile() {
+      const fresh = createEmptyData();
+      if (!("showSaveFilePicker" in window)) {
+        state.data = fresh;
+        state.connected = false;
+        state.fileName = "applications.json";
+        state.dirty = false;
+        downloadJson(fresh, "applications.json");
+        renderAll();
+        setFileStatus("idle", "浏览器下载模式");
+        return;
+      }
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: "applications.json",
+          types: [{ description: "秋招投递 JSON", accept: { "application/json": [".json"] } }]
+        });
+        await writeToHandle(handle, fresh);
+        state.data = fresh;
+        state.fileHandle = handle;
+        state.fileName = handle.name;
+        state.connected = true;
+        state.dirty = false;
+        await rememberHandle(handle);
+        renderAll();
+        setFileStatus("saved", "已创建并保存");
+        toast("新的数据文件已创建。");
+      } catch (error) {
+        if (error.name !== "AbortError") showError(error);
+      }
+    }
+
+    async function loadFromHandle(handle) {
+      const file = await handle.getFile();
+      const text = await file.text();
+      if (!text.trim()) throw new Error("所选文件为空。请使用“新建数据”创建标准文件。");
+      let parsed;
+      try { parsed = JSON.parse(text); } catch { throw new Error("JSON 格式损坏，未对原文件做任何修改。"); }
+      const normalized = validateAndNormalize(parsed);
+      state.data = normalized;
+      state.fileHandle = handle;
+      state.pendingHandle = null;
+      state.fileName = handle.name;
+      state.connected = true;
+      state.dirty = false;
+      renderAll();
+      setFileStatus("saved", "已保存");
+    }
+
+    async function importFallbackFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const parsed = JSON.parse(await file.text());
+        state.data = validateAndNormalize(parsed);
+        state.fileHandle = null;
+        state.fileName = file.name;
+        state.connected = false;
+        state.dirty = false;
+        renderAll();
+        setFileStatus("idle", "需下载保存");
+        toast("已导入数据；修改后请点击“立即保存”下载文件。", "", 5000);
+      } catch (error) { showError(error); }
+    }
+
+    async function saveNow() {
+      clearTimeout(state.saveTimer);
+      if (!state.fileHandle) {
+        downloadJson(state.data, state.fileName || "applications.json");
+        state.dirty = false;
+        setFileStatus("saved", "已下载副本");
+        return;
+      }
+      try {
+        const permission = await ensurePermission(state.fileHandle, true);
+        if (!permission) throw new Error("没有文件写入权限，请重新打开数据文件。");
+        await queueWrite();
+      } catch (error) { showError(error); }
+    }
+
+    async function saveBackup() {
+      const date = today().replaceAll("-", "");
+      const suggestedName = `applications-backup-${date}.json`;
+      if (!("showSaveFilePicker" in window)) {
+        downloadJson(state.data, suggestedName);
+        return;
+      }
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName,
+          types: [{ description: "JSON 备份", accept: { "application/json": [".json"] } }]
+        });
+        await writeToHandle(handle, state.data);
+        toast("备份已保存，当前主数据文件未切换。");
+      } catch (error) {
+        if (error.name !== "AbortError") showError(error);
+      }
+    }
+
+    function scheduleSave() {
+      state.dirty = true;
+      setFileStatus(state.fileHandle ? "saving" : "idle", state.fileHandle ? "等待自动保存" : "需下载保存");
+      clearTimeout(state.saveTimer);
+      state.saveTimer = setTimeout(() => {
+        if (state.fileHandle) queueWrite().catch(showError);
+      }, 450);
+    }
+
+    async function queueWrite() {
+      state.writeQueue = state.writeQueue.catch(() => {}).then(async () => {
+        if (!(await ensurePermission(state.fileHandle, false))) {
+          state.dirty = true;
+          setFileStatus("idle", "点击立即保存以授权");
+          return;
+        }
+        setFileStatus("saving", "正在保存…");
+        await writeToHandle(state.fileHandle, state.data);
+        state.dirty = false;
+        setFileStatus("saved", "已保存");
+      });
+      return state.writeQueue;
+    }
+
+    async function writeToHandle(handle, data) {
+      const writable = await handle.createWritable();
+      try {
+        await writable.write(JSON.stringify(data, null, 2) + "\n");
+        await writable.close();
+      } catch (error) {
+        try { await writable.abort(); } catch {}
+        throw error;
+      }
+    }
+
+    async function ensurePermission(handle, request = false) {
+      const options = { mode: "readwrite" };
+      if ((await handle.queryPermission(options)) === "granted") return true;
+      return request && (await handle.requestPermission(options)) === "granted";
+    }
+
+    function downloadJson(data, name) {
+      const blob = new Blob([JSON.stringify(data, null, 2) + "\n"], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = name;
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function openEditDialog(record = null) {
+      els["application-form"].reset();
+      els["form-error"].textContent = "";
+      populateFormSelects();
+      els["edit-dialog-title"].textContent = record ? "编辑投递" : "新增投递";
+      els["record-id"].value = record?.id || "";
+      els["company-input"].value = record?.company || "";
+      els["role-input"].value = record?.role || "";
+      els["location-input"].value = record?.location || state.data.options.locations[0] || "";
+      els["applied-date-input"].value = record?.appliedDate || today();
+      els["channel-input"].value = record?.channel || state.data.options.channels[0] || "";
+      els["status-input"].value = record?.status || state.data.options.statuses[0] || "";
+      els["next-date-input"].value = record?.nextDate || "";
+      els["url-input"].value = record?.url || "";
+      els["notes-input"].value = record?.notes || "";
+      els["edit-dialog"].showModal();
+      requestAnimationFrame(() => els["company-input"].focus());
+    }
+
+    function submitApplication(event) {
+      event.preventDefault();
+      const company = cleanText(els["company-input"].value, 80);
+      const role = cleanText(els["role-input"].value, 100);
+      if (!company || !role) {
+        els["form-error"].textContent = "请填写公司和岗位。";
+        return;
+      }
+      const url = cleanText(els["url-input"].value, 500);
+      if (url) {
+        try {
+          const parsed = new URL(url);
+          if (!/^https?:$/.test(parsed.protocol)) throw new Error();
+        } catch {
+          els["form-error"].textContent = "招聘链接需要以 http:// 或 https:// 开头。";
+          return;
+        }
+      }
+
+      const id = els["record-id"].value;
+      const existing = state.data.applications.find(item => item.id === id);
+      const now = new Date().toISOString();
+      const record = {
+        id: existing?.id || uid(),
+        company,
+        role,
+        location: els["location-input"].value,
+        appliedDate: els["applied-date-input"].value,
+        channel: els["channel-input"].value,
+        status: els["status-input"].value,
+        nextDate: els["next-date-input"].value,
+        url,
+        notes: cleanText(els["notes-input"].value, 2000),
+        createdAt: existing?.createdAt || now,
+        updatedAt: now
+      };
+      if (existing) Object.assign(existing, record);
+      else state.data.applications.push(record);
+      els["edit-dialog"].close();
+      renderAll();
+      scheduleSave();
+      toast(existing ? "投递记录已更新。" : "投递记录已添加。");
+    }
+
+    function deleteApplication(id) {
+      const record = state.data.applications.find(item => item.id === id);
+      if (!record || !confirm(`确定删除“${record.company} · ${record.role}”吗？`)) return;
+      state.data.applications = state.data.applications.filter(item => item.id !== id);
+      renderAll();
+      scheduleSave();
+      toast("投递记录已删除。");
+    }
+
+    function updateApplicationStatus(id, status) {
+      const record = state.data.applications.find(item => item.id === id);
+      if (!record || record.status === status) return;
+      record.status = status;
+      record.updatedAt = new Date().toISOString();
+      renderAll();
+      scheduleSave();
+    }
+
+    function renderAll() {
+      renderOptionControls();
+      renderStats();
+      renderRecords();
+      if (!state.fileHandle && !state.fileName) setFileStatus("idle", "未保存");
+    }
+
+    function renderOptionControls() {
+      fillSelect(els["status-filter"], state.data.options.statuses, "全部进展", true);
+      fillSelect(els["channel-filter"], state.data.options.channels, "全部渠道", true);
+      fillSelect(els["location-filter"], state.data.options.locations, "全部地点", true);
+    }
+
+    function populateFormSelects() {
+      fillSelect(els["status-input"], state.data.options.statuses);
+      fillSelect(els["channel-input"], state.data.options.channels);
+      fillSelect(els["location-input"], state.data.options.locations);
+    }
+
+    function fillSelect(select, values, firstLabel = "", preserve = false) {
+      const previous = preserve ? select.value : "";
+      select.replaceChildren();
+      if (firstLabel) select.append(new Option(firstLabel, ""));
+      values.forEach(value => select.append(new Option(value, value)));
+      if (preserve && [...select.options].some(option => option.value === previous)) select.value = previous;
+    }
+
+    function renderStats() {
+      const records = state.data.applications;
+      const inactive = new Set(["Offer", "已拒绝", "已结束"]);
+      els["stat-total"].textContent = records.length;
+      els["stat-active"].textContent = records.filter(item => !inactive.has(item.status)).length;
+      els["stat-interview"].textContent = records.filter(item => /面/.test(item.status)).length;
+      els["stat-offer"].textContent = records.filter(item => item.status === "Offer").length;
+    }
+
+    function filteredRecords() {
+      const query = els["search-input"].value.trim().toLocaleLowerCase("zh-CN");
+      const status = els["status-filter"].value;
+      const channel = els["channel-filter"].value;
+      const location = els["location-filter"].value;
+      const records = state.data.applications.filter(item => {
+        const haystack = `${item.company} ${item.role} ${item.notes}`.toLocaleLowerCase("zh-CN");
+        return (!query || haystack.includes(query)) && (!status || item.status === status) && (!channel || item.channel === channel) && (!location || item.location === location);
+      });
+      const sort = els["sort-select"].value;
+      return records.sort((a, b) => {
+        if (sort === "applied-desc") return (b.appliedDate || "").localeCompare(a.appliedDate || "");
+        if (sort === "applied-asc") return (a.appliedDate || "9999").localeCompare(b.appliedDate || "9999");
+        if (sort === "company-asc") return a.company.localeCompare(b.company, "zh-CN");
+        return b.updatedAt.localeCompare(a.updatedAt);
+      });
+    }
+
+    function renderRecords() {
+      const records = filteredRecords();
+      const hasAny = state.data.applications.length > 0;
+      const noResults = hasAny && records.length === 0;
+      els["empty-state"].classList.toggle("hidden", hasAny && !noResults);
+      if (!hasAny || noResults) {
+        const h2 = els["empty-state"].querySelector("h2");
+        const p = els["empty-state"].querySelector("p");
+        const button = els["empty-open-btn"];
+        h2.textContent = noResults ? "没有匹配的投递" : "从第一条投递开始";
+        p.textContent = noResults ? "换个关键词或清除筛选条件试试。" : "打开已有 JSON 数据，或新建一个数据文件。之后的更改会自动保存到本地。";
+        button.textContent = noResults ? "清除筛选" : "打开数据文件";
+        button.onclick = noResults ? clearFilters : openDataFile;
+      }
+
+      const showContent = hasAny && !noResults;
+      els["table-view"].classList.toggle("hidden", !showContent || state.view !== "table");
+      els["kanban-view"].classList.toggle("hidden", !showContent || state.view !== "kanban");
+      if (!showContent) return;
+      renderTable(records);
+      renderKanban(records);
+    }
+
+    function renderTable(records) {
+      els["application-body"].replaceChildren();
+      records.forEach(record => {
+        const tr = document.createElement("tr");
+
+        const companyTd = document.createElement("td");
+        companyTd.className = "company-cell";
+        const company = document.createElement("div");
+        company.className = "company-name";
+        company.textContent = record.company;
+        const role = document.createElement("div");
+        role.className = "role-name";
+        role.textContent = record.role;
+        companyTd.append(company, role);
+        tr.append(companyTd);
+
+        tr.append(textCell(record.location || "—", "cell-muted"));
+        tr.append(textCell(record.appliedDate || "—", "cell-muted"));
+        tr.append(textCell(record.channel || "—"));
+
+        const statusTd = document.createElement("td");
+        const statusSelect = document.createElement("select");
+        statusSelect.className = "inline-select";
+        statusSelect.setAttribute("aria-label", `${record.company}的进展`);
+        state.data.options.statuses.forEach(value => statusSelect.append(new Option(value, value)));
+        statusSelect.value = record.status;
+        statusSelect.addEventListener("change", () => updateApplicationStatus(record.id, statusSelect.value));
+        statusTd.append(statusSelect);
+        tr.append(statusTd);
+
+        tr.append(textCell(record.nextDate || "—", "cell-muted"));
+        const linkTd = document.createElement("td");
+        if (record.url) {
+          const link = document.createElement("a");
+          link.className = "link";
+          link.href = record.url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = "打开 ↗";
+          linkTd.append(link);
+        } else linkTd.textContent = "—";
+        tr.append(linkTd);
+
+        const actionTd = document.createElement("td");
+        const actions = document.createElement("div");
+        actions.className = "row-actions";
+        const edit = actionButton("编辑", () => openEditDialog(record));
+        const remove = actionButton("删除", () => deleteApplication(record.id), true);
+        actions.append(edit, remove);
+        actionTd.append(actions);
+        tr.append(actionTd);
+        els["application-body"].append(tr);
+      });
+    }
+
+    function renderKanban(records) {
+      els["kanban-view"].replaceChildren();
+      state.data.options.statuses.forEach(status => {
+        const column = document.createElement("section");
+        column.className = "kanban-column";
+        const head = document.createElement("div");
+        head.className = "kanban-head";
+        const title = document.createElement("span");
+        title.textContent = status;
+        const statusRecords = records.filter(item => item.status === status);
+        const count = document.createElement("span");
+        count.className = "count";
+        count.textContent = statusRecords.length;
+        head.append(title, count);
+        const list = document.createElement("div");
+        list.className = "kanban-list";
+        statusRecords.forEach(record => list.append(createJobCard(record)));
+        column.append(head, list);
+        els["kanban-view"].append(column);
+      });
+    }
+
+    function createJobCard(record) {
+      const card = document.createElement("article");
+      card.className = "job-card";
+      const title = document.createElement("div");
+      title.className = "job-card-title";
+      title.textContent = record.company;
+      const role = document.createElement("div");
+      role.className = "job-card-role";
+      role.textContent = record.role;
+      const meta = document.createElement("div");
+      meta.className = "job-meta";
+      [record.location, record.appliedDate].filter(Boolean).forEach(text => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = text;
+        meta.append(chip);
+      });
+      const footer = document.createElement("div");
+      footer.className = "job-card-footer";
+      const select = document.createElement("select");
+      select.className = "inline-select";
+      select.setAttribute("aria-label", `${record.company}的进展`);
+      state.data.options.statuses.forEach(value => select.append(new Option(value, value)));
+      select.value = record.status;
+      select.addEventListener("change", () => updateApplicationStatus(record.id, select.value));
+      const edit = actionButton("编辑", () => openEditDialog(record));
+      footer.append(select, edit);
+      card.append(title, role, meta, footer);
+      return card;
+    }
+
+    function textCell(text, className = "") {
+      const td = document.createElement("td");
+      td.textContent = text;
+      td.className = className;
+      return td;
+    }
+
+    function actionButton(label, handler, danger = false) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `btn btn-small btn-ghost${danger ? " btn-danger" : ""}`;
+      button.textContent = label;
+      button.addEventListener("click", handler);
+      return button;
+    }
+
+    function setView(view) {
+      state.view = view;
+      const tableActive = view === "table";
+      els["table-view-btn"].classList.toggle("active", tableActive);
+      els["table-view-btn"].setAttribute("aria-pressed", String(tableActive));
+      els["kanban-view-btn"].classList.toggle("active", !tableActive);
+      els["kanban-view-btn"].setAttribute("aria-pressed", String(!tableActive));
+      renderRecords();
+    }
+
+    function clearFilters() {
+      els["search-input"].value = "";
+      els["status-filter"].value = "";
+      els["channel-filter"].value = "";
+      els["location-filter"].value = "";
+      els["sort-select"].value = "updated-desc";
+      renderRecords();
+    }
+
+    function openSettings() {
+      renderSettings();
+      els["settings-dialog"].showModal();
+    }
+
+    function renderSettings() {
+      els["settings-body"].replaceChildren();
+      const definitions = [
+        { key: "statuses", title: "进展阶段", hint: "顺序即看板列顺序" },
+        { key: "channels", title: "投递渠道", hint: "用于表单和筛选" },
+        { key: "locations", title: "工作地点", hint: "用于表单和筛选" }
+      ];
+      definitions.forEach(definition => {
+        const section = document.createElement("section");
+        section.className = "settings-section";
+        const titleRow = document.createElement("div");
+        titleRow.className = "settings-title";
+        const title = document.createElement("h3");
+        title.textContent = definition.title;
+        const hint = document.createElement("span");
+        hint.textContent = definition.hint;
+        titleRow.append(title, hint);
+        const list = document.createElement("div");
+        list.className = "option-list";
+        state.data.options[definition.key].forEach((value, index) => list.append(createOptionRow(definition.key, value, index)));
+        const add = document.createElement("div");
+        add.className = "option-add";
+        const input = document.createElement("input");
+        input.className = "control";
+        input.maxLength = 50;
+        input.placeholder = `新增${definition.title}`;
+        const button = actionButton("添加", () => addOption(definition.key, input));
+        button.classList.add("btn-primary");
+        input.addEventListener("keydown", event => {
+          if (event.key === "Enter") { event.preventDefault(); addOption(definition.key, input); }
+        });
+        add.append(input, button);
+        section.append(titleRow, list, add);
+        els["settings-body"].append(section);
+      });
+    }
+
+    function createOptionRow(type, value, index) {
+      const row = document.createElement("div");
+      row.className = "option-row";
+      const input = document.createElement("input");
+      input.className = "control";
+      input.value = value;
+      input.maxLength = 50;
+      input.setAttribute("aria-label", `编辑选项 ${value}`);
+      input.addEventListener("change", () => renameOption(type, value, input.value));
+      const up = actionButton("↑", () => moveOption(type, index, -1));
+      up.classList.add("icon-btn");
+      up.disabled = index === 0;
+      up.setAttribute("aria-label", `上移 ${value}`);
+      const down = actionButton("↓", () => moveOption(type, index, 1));
+      down.classList.add("icon-btn");
+      down.disabled = index === state.data.options[type].length - 1;
+      down.setAttribute("aria-label", `下移 ${value}`);
+      const remove = actionButton("删除", () => deleteOption(type, value), true);
+      remove.classList.add("delete-option");
+      row.append(input, up, down, remove);
+      return row;
+    }
+
+    function addOption(type, input) {
+      const value = cleanText(input.value, 50);
+      if (!value) return;
+      if (state.data.options[type].includes(value)) {
+        toast("这个选项已经存在。", "error");
+        return;
+      }
+      state.data.options[type].push(value);
+      input.value = "";
+      optionsChanged();
+    }
+
+    function renameOption(type, oldValue, nextValue) {
+      const value = cleanText(nextValue, 50);
+      if (!value || (value !== oldValue && state.data.options[type].includes(value))) {
+        toast(!value ? "选项名称不能为空。" : "这个选项已经存在。", "error");
+        renderSettings();
+        return;
+      }
+      if (value === oldValue) return;
+      const index = state.data.options[type].indexOf(oldValue);
+      state.data.options[type][index] = value;
+      replaceReferences(type, oldValue, value);
+      optionsChanged();
+    }
+
+    function moveOption(type, index, offset) {
+      const target = index + offset;
+      if (target < 0 || target >= state.data.options[type].length) return;
+      const options = state.data.options[type];
+      [options[index], options[target]] = [options[target], options[index]];
+      optionsChanged();
+    }
+
+    function deleteOption(type, value) {
+      const options = state.data.options[type];
+      if (options.length <= 1) {
+        toast("每组选项至少保留一个。", "error");
+        return;
+      }
+      const field = optionField(type);
+      const usage = state.data.applications.filter(item => item[field] === value).length;
+      if (usage) {
+        state.replacement = { type, value };
+        els["replace-description"].textContent = `“${value}”正在被 ${usage} 条记录使用，请先选择替代项。`;
+        fillSelect(els["replacement-select"], options.filter(item => item !== value));
+        els["replace-dialog"].showModal();
+        return;
+      }
+      if (!confirm(`确定删除选项“${value}”吗？`)) return;
+      state.data.options[type] = options.filter(item => item !== value);
+      optionsChanged();
+    }
+
+    function applyReplacement(event) {
+      event.preventDefault();
+      if (!state.replacement) return;
+      const { type, value } = state.replacement;
+      replaceReferences(type, value, els["replacement-select"].value);
+      state.data.options[type] = state.data.options[type].filter(item => item !== value);
+      state.replacement = null;
+      els["replace-dialog"].close();
+      optionsChanged();
+    }
+
+    function optionField(type) {
+      return { statuses: "status", channels: "channel", locations: "location" }[type];
+    }
+
+    function replaceReferences(type, oldValue, newValue) {
+      const field = optionField(type);
+      state.data.applications.forEach(item => {
+        if (item[field] === oldValue) {
+          item[field] = newValue;
+          item.updatedAt = new Date().toISOString();
+        }
+      });
+    }
+
+    function optionsChanged() {
+      renderSettings();
+      renderAll();
+      scheduleSave();
+    }
+
+    function setFileStatus(status, label) {
+      els["file-status"].dataset.state = status;
+      els["file-name"].textContent = state.fileName || "尚未连接数据文件";
+      els["save-label"].textContent = label;
+    }
+
+    function toast(message, type = "", duration = 3200) {
+      const item = document.createElement("div");
+      item.className = `toast ${type}`.trim();
+      item.textContent = message;
+      els["toast-stack"].append(item);
+      setTimeout(() => item.remove(), duration);
+    }
+
+    function showError(error) {
+      console.error(error);
+      setFileStatus("error", "操作失败");
+      toast(error?.message || "操作失败，请重试。", "error", 5200);
+    }
+
+    function openHandleDb() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("autumn-recruitment-files", 1);
+        request.onupgradeneeded = () => request.result.createObjectStore("handles");
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function rememberHandle(handle) {
+      try {
+        const db = await openHandleDb();
+        const tx = db.transaction("handles", "readwrite");
+        tx.objectStore("handles").put(handle, "primary");
+        await new Promise((resolve, reject) => {
+          tx.oncomplete = resolve;
+          tx.onerror = () => reject(tx.error);
+        });
+        db.close();
+      } catch (error) { console.warn("无法记住文件句柄", error); }
+    }
+
+    async function restoreFileHandle() {
+      if (!("showOpenFilePicker" in window)) return;
+      try {
+        const db = await openHandleDb();
+        const tx = db.transaction("handles", "readonly");
+        const request = tx.objectStore("handles").get("primary");
+        const handle = await new Promise((resolve, reject) => {
+          request.onsuccess = () => resolve(request.result);
+          request.onerror = () => reject(request.error);
+        });
+        db.close();
+        if (!handle) return;
+        state.fileName = handle.name;
+        if (await ensurePermission(handle, false)) {
+          await loadFromHandle(handle);
+          toast("已恢复上次使用的数据文件。", "", 2200);
+        } else {
+          state.fileHandle = null;
+          state.pendingHandle = handle;
+          state.connected = false;
+          setFileStatus("idle", "需要重新授权");
+        }
+      } catch (error) { console.warn("无法恢复文件句柄", error); }
+    }
+
+    init();
+  </script>
+</body>
+</html>
