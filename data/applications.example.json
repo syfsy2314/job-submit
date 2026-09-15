@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "options": {
+    "statuses": [
+      "待投递",
+      "已投递",
+      "笔试",
+      "一面",
+      "二面",
+      "HR 面",
+      "Offer",
+      "已拒绝",
+      "已结束"
+    ],
+    "channels": [
+      "官网",
+      "内推",
+      "Boss 直聘",
+      "猎聘",
+      "实习僧",
+      "公众号 / 校招群",
+      "其他"
+    ],
+    "locations": [
+      "北京",
+      "上海",
+      "广州",
+      "深圳",
+      "杭州",
+      "南京",
+      "成都",
+      "武汉",
+      "西安",
+      "苏州",
+      "远程",
+      "其他"
+    ]
+  },
+  "applications": [
+    {
+      "id": "example-application-001",
+      "company": "示例科技",
+      "role": "前端开发工程师",
+      "location": "上海",
+      "appliedDate": "2026-09-01",
+      "channel": "官网",
+      "status": "已投递",
+      "nextDate": "2026-09-08",
+      "url": "https://example.com/careers/frontend",
+      "notes": "这是一条演示记录，复制模板后可以编辑或删除。",
+      "createdAt": "2026-09-01T02:00:00.000Z",
+      "updatedAt": "2026-09-01T02:00:00.000Z"
+    }
+  ]
+}
