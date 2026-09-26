@@ -25,6 +25,22 @@
       --shadow: 0 16px 40px rgba(31, 42, 68, .08);
       --radius: 18px;
       --radius-sm: 11px;
+      --tone-gray: #6b7280;
+      --tone-slate: #5b7089;
+      --tone-zinc: #4b5563;
+      --tone-indigo: #4f46e5;
+      --tone-blue: #1d4ed8;
+      --tone-sky: #0369a1;
+      --tone-teal: #0f766e;
+      --tone-green: #15803d;
+      --tone-lime: #4d7c0f;
+      --tone-amber: #b54708;
+      --tone-orange: #c2410c;
+      --tone-brown: #92400e;
+      --tone-red: #c0362c;
+      --tone-rose: #be185d;
+      --tone-fuchsia: #a21caf;
+      --tone-purple: #7c3aed;
       --font: Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
     }
 
@@ -46,6 +62,22 @@
         --danger: #ff8d86;
         --danger-soft: #44221f;
         --shadow: 0 18px 44px rgba(0, 0, 0, .22);
+        --tone-gray: #a6adbb;
+        --tone-slate: #93b0cd;
+        --tone-zinc: #9ca3af;
+        --tone-indigo: #a5b4fc;
+        --tone-blue: #93b8ff;
+        --tone-sky: #7dd3fc;
+        --tone-teal: #5eead4;
+        --tone-green: #86efac;
+        --tone-lime: #bef264;
+        --tone-amber: #f5b86b;
+        --tone-orange: #fb923c;
+        --tone-brown: #d9a066;
+        --tone-red: #ff8d86;
+        --tone-rose: #f472b6;
+        --tone-fuchsia: #f0abfc;
+        --tone-purple: #c4b5fd;
       }
     }
 
@@ -107,9 +139,9 @@
     .stat { padding: 18px 19px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); box-shadow: 0 10px 26px rgba(25, 34, 58, .04); }
     .stat-label { color: var(--muted); font-size: 13px; }
     .stat-value { margin-top: 4px; font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -.03em; }
-    .stat:nth-child(2) .stat-value { color: var(--primary); }
-    .stat:nth-child(3) .stat-value { color: var(--warning); }
-    .stat:nth-child(4) .stat-value { color: var(--success); }
+    .stat:nth-child(2) .stat-value { color: var(--tone-indigo); }
+    .stat:nth-child(3) .stat-value { color: var(--tone-amber); }
+    .stat:nth-child(4) .stat-value { color: var(--tone-green); }
 
     .workspace { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; }
     .toolbar { padding: 16px 18px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
@@ -126,16 +158,57 @@
 
     .content-area { min-height: 360px; }
     .table-wrap { width: 100%; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1030px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1240px; }
     th { padding: 12px 14px; color: var(--muted); background: var(--surface-2); font-size: 12px; text-align: left; white-space: nowrap; font-weight: 600; }
     td { padding: 13px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
     tbody tr:hover { background: color-mix(in srgb, var(--primary-soft) 40%, transparent); }
-    .company-cell { min-width: 185px; }
+    .company-cell { min-width: 160px; }
     .company-name { font-weight: 700; }
     .role-name { color: var(--muted); margin-top: 2px; font-size: 13px; }
     .cell-muted { color: var(--muted); white-space: nowrap; }
+    .next-cell { min-width: 165px; }
+    .next-note { color: var(--muted); }
+    .notes-cell { max-width: 240px; }
+    .notes-text { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
     .inline-select { min-height: 32px; max-width: 130px; border: 1px solid var(--border); border-radius: 8px; padding: 4px 24px 4px 8px; background: var(--surface); color: var(--text); }
     .row-actions { display: flex; gap: 5px; white-space: nowrap; }
+
+    .status-tone {
+      border-color: color-mix(in srgb, var(--tone) 42%, var(--border));
+      background-color: color-mix(in srgb, var(--tone) 12%, var(--surface));
+      color: var(--tone);
+      font-weight: 600;
+    }
+    .tone-text { color: var(--tone); }
+    .status-tone-gray { --tone: var(--tone-gray); }
+    .status-tone-slate { --tone: var(--tone-slate); }
+    .status-tone-zinc { --tone: var(--tone-zinc); }
+    .status-tone-indigo { --tone: var(--tone-indigo); }
+    .status-tone-blue { --tone: var(--tone-blue); }
+    .status-tone-sky { --tone: var(--tone-sky); }
+    .status-tone-teal { --tone: var(--tone-teal); }
+    .status-tone-green { --tone: var(--tone-green); }
+    .status-tone-lime { --tone: var(--tone-lime); }
+    .status-tone-amber { --tone: var(--tone-amber); }
+    .status-tone-orange { --tone: var(--tone-orange); }
+    .status-tone-brown { --tone: var(--tone-brown); }
+    .status-tone-red { --tone: var(--tone-red); }
+    .status-tone-rose { --tone: var(--tone-rose); }
+    .status-tone-fuchsia { --tone: var(--tone-fuchsia); }
+    .status-tone-purple { --tone: var(--tone-purple); }
+
+    tr.group-row td {
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+      background: color-mix(in srgb, var(--primary-soft) 58%, var(--surface));
+    }
+    tr.group-row:first-child td { border-top: 0; }
+    tr.group-row:hover td { background: color-mix(in srgb, var(--primary-soft) 58%, var(--surface)); }
+    .group-head { display: flex; align-items: center; gap: 9px; }
+    .group-head strong { font-size: 14px; }
+    .group-head .count { background: var(--surface); }
+    tr.record-row td:first-child { box-shadow: inset 3px 0 0 color-mix(in srgb, var(--primary) 28%, transparent); }
+    .chip.chip-pref { background: color-mix(in srgb, var(--tone-teal) 14%, transparent); color: var(--tone-teal); }
     .link { color: var(--primary); text-decoration: none; font-weight: 600; }
     .link:hover { text-decoration: underline; }
 
@@ -288,7 +361,7 @@
           <table>
             <thead>
               <tr>
-                <th>公司 / 岗位</th><th>地点</th><th>投递日期</th><th>渠道</th><th>进展</th><th>下一步</th><th>链接</th><th>操作</th>
+                <th>公司 / 岗位</th><th>志愿</th><th>地点</th><th>投递日期</th><th>渠道</th><th>进展</th><th>下一步</th><th>备注</th><th>链接</th><th>操作</th>
               </tr>
             </thead>
             <tbody id="application-body"></tbody>
@@ -312,12 +385,15 @@
         <div class="form-grid">
           <div class="field"><label class="required" for="company-input">公司</label><input id="company-input" class="control" required maxlength="80" placeholder="例如：某某科技"></div>
           <div class="field"><label class="required" for="role-input">岗位</label><input id="role-input" class="control" required maxlength="100" placeholder="例如：前端开发工程师"></div>
+          <div class="field"><label for="preference-input">志愿</label><select id="preference-input" class="control"></select></div>
           <div class="field"><label for="location-input">地点</label><select id="location-input" class="control"></select></div>
           <div class="field"><label for="applied-date-input">投递日期</label><input id="applied-date-input" class="control" type="date"></div>
           <div class="field"><label for="channel-input">投递渠道</label><select id="channel-input" class="control"></select></div>
           <div class="field"><label for="status-input">当前进展</label><select id="status-input" class="control"></select></div>
           <div class="field"><label for="next-date-input">下一步日期</label><input id="next-date-input" class="control" type="date"></div>
-          <div class="field"><label for="url-input">招聘链接</label><input id="url-input" class="control" type="url" maxlength="500" placeholder="https://"></div>
+          <div class="field"><label for="next-time-input">下一步时间</label><input id="next-time-input" class="control" type="time"></div>
+          <div class="field"><label for="next-note-input">下一步备注</label><input id="next-note-input" class="control" maxlength="60" placeholder="例如：二面"></div>
+          <div class="field full"><label for="url-input">招聘链接</label><input id="url-input" class="control" type="url" maxlength="500" placeholder="https://"></div>
           <div class="field full"><label for="notes-input">备注</label><textarea id="notes-input" class="control" maxlength="2000" placeholder="记录联系人、面试重点、待办事项等"></textarea></div>
         </div>
         <div id="form-error" class="form-error" role="alert"></div>
@@ -358,10 +434,32 @@
     "use strict";
 
     const DEFAULT_OPTIONS = {
-      statuses: ["待投递", "已投递", "笔试", "一面", "二面", "HR 面", "Offer", "已拒绝", "已结束"],
+      statuses: ["待投递", "已投递", "笔试", "一面", "二面", "三面", "HR 面", "终面", "Offer", "已拒绝", "已结束"],
       channels: ["官网", "内推", "Boss 直聘", "猎聘", "实习僧", "公众号 / 校招群", "其他"],
-      locations: ["北京", "上海", "广州", "深圳", "杭州", "南京", "成都", "武汉", "西安", "苏州", "远程", "其他"]
+      locations: ["北京", "上海", "广州", "深圳", "杭州", "南京", "成都", "武汉", "西安", "苏州", "远程", "其他"],
+      preferences: ["第一志愿", "第二志愿", "第三志愿", "服从调剂"]
     };
+
+    const OPTION_KEYS = ["statuses", "channels", "locations", "preferences"];
+
+    // 状态语义色板：tone 决定配色，group 决定统计口径，二者是唯一事实来源。
+    const STATUS_RULES = [
+      { re: /hr|人力/i, tone: "teal", group: "interview" },
+      { re: /终面|三面|四面|final|总监面|总裁面|boss面/i, tone: "purple", group: "interview" },
+      { re: /二面|复试|复面/, tone: "orange", group: "interview" },
+      { re: /一面|初面|群面/, tone: "amber", group: "interview" },
+      { re: /面/, tone: "amber", group: "interview" },
+      { re: /笔试|测评|机试|笔|测/, tone: "indigo", group: "written" },
+      { re: /offer|录用|意向/i, tone: "green", group: "offer" },
+      { re: /拒|未通过|挂|淘汰|感谢信/, tone: "red", group: "rejected" },
+      { re: /结束|放弃|终止|关闭/, tone: "zinc", group: "closed" },
+      { re: /待投|待申请|未投/, tone: "gray", group: "pending" },
+      { re: /已投|投递|已申请|申请中/, tone: "slate", group: "applied" }
+    ];
+    const STATUS_TONE_POOL = [
+      "indigo", "teal", "purple", "rose", "amber", "orange", "green", "slate",
+      "sky", "fuchsia", "red", "blue", "lime", "brown", "zinc", "gray"
+    ];
 
     const state = {
       data: createEmptyData(),
@@ -407,7 +505,11 @@
       if (!raw.options || typeof raw.options !== "object" || !Array.isArray(raw.applications)) throw new Error("数据文件缺少 options 或 applications。");
 
       const options = {};
-      for (const key of ["statuses", "channels", "locations"]) {
+      for (const key of OPTION_KEYS) {
+        if (raw.options[key] === undefined || raw.options[key] === null) {
+          options[key] = [...DEFAULT_OPTIONS[key]];
+          continue;
+        }
         if (!Array.isArray(raw.options[key])) throw new Error(`选项 ${key} 的格式不正确。`);
         options[key] = [...new Set(raw.options[key].map(v => cleanText(v, 50)).filter(Boolean))];
         if (!options[key].length) options[key] = [...DEFAULT_OPTIONS[key]];
@@ -419,24 +521,30 @@
         const company = cleanText(item.company, 80);
         const role = cleanText(item.role, 100);
         if (!company || !role) throw new Error(`第 ${index + 1} 条记录缺少公司或岗位。`);
+        const preference = cleanText(item.preference, 50);
         const location = cleanText(item.location, 50);
         const channel = cleanText(item.channel, 50);
         const status = cleanText(item.status, 50) || options.statuses[0];
+        if (preference && !options.preferences.includes(preference)) options.preferences.push(preference);
         if (location && !options.locations.includes(location)) options.locations.push(location);
         if (channel && !options.channels.includes(channel)) options.channels.push(channel);
         if (status && !options.statuses.includes(status)) options.statuses.push(status);
         let id = cleanText(item.id, 100) || uid();
         if (seenIds.has(id)) id = uid();
         seenIds.add(id);
+        const split = splitDateTime(item.nextDate);
         return {
           id,
           company,
           role,
+          preference,
           location,
           appliedDate: normalizeDate(item.appliedDate),
           channel,
           status,
-          nextDate: normalizeDate(item.nextDate),
+          nextDate: split.date,
+          nextTime: normalizeTime(item.nextTime) || split.time,
+          nextNote: cleanText(item.nextNote, 60),
           url: cleanText(item.url, 500),
           notes: cleanText(item.notes, 2000),
           createdAt: normalizeTimestamp(item.createdAt),
@@ -447,8 +555,80 @@
     }
 
     function normalizeDate(value) {
-      const text = cleanText(value, 10);
-      return /^\d{4}-\d{2}-\d{2}$/.test(text) ? text : "";
+      const text = cleanText(value, 20);
+      const match = /^\d{4}-\d{2}-\d{2}/.exec(text);
+      return match ? match[0] : "";
+    }
+
+    function normalizeTime(value) {
+      const text = cleanText(value, 5);
+      return /^([01]\d|2[0-3]):[0-5]\d$/.test(text) ? text : "";
+    }
+
+    // 兼容历史数据：把 "2026-09-22 14:00" 这类值拆成日期与时分，避免时分被静默丢弃。
+    function splitDateTime(value) {
+      const text = cleanText(value, 40);
+      const match = /^(\d{4}-\d{2}-\d{2})[ T](\d{1,2}):(\d{1,2})/.exec(text);
+      if (!match) return { date: normalizeDate(text), time: "" };
+      const hour = String(Math.min(23, Number(match[2]))).padStart(2, "0");
+      const minute = String(Math.min(59, Number(match[3]))).padStart(2, "0");
+      return { date: match[1], time: `${hour}:${minute}` };
+    }
+
+    function matchStatusRule(status) {
+      const text = String(status ?? "");
+      for (const rule of STATUS_RULES) {
+        if (rule.re.test(text)) return { tone: rule.tone, group: rule.group };
+      }
+      return null;
+    }
+
+    // 状态名没命中关键词时，按出现顺序从「已被占用色」之外的色板里取色，尽量不撞色。
+    let statusMetaCache = null;
+    function statusMetaMap() {
+      const statuses = state.data.options.statuses;
+      const key = statuses.join("\u0000");
+      if (statusMetaCache && statusMetaCache.key === key) return statusMetaCache.map;
+      const map = new Map();
+      const used = new Set();
+      statuses.forEach(status => {
+        const matched = matchStatusRule(status);
+        if (matched) {
+          map.set(status, matched);
+          used.add(matched.tone);
+        }
+      });
+      const free = STATUS_TONE_POOL.filter(tone => !used.has(tone));
+      const pool = free.length ? free : STATUS_TONE_POOL;
+      let cursor = 0;
+      statuses.forEach(status => {
+        if (map.has(status)) return;
+        map.set(status, { tone: pool[cursor++ % pool.length], group: "applied" });
+      });
+      statusMetaCache = { key, map };
+      return map;
+    }
+
+    function statusMetaOf(status) {
+      const map = statusMetaMap();
+      if (map.has(status)) return map.get(status);
+      return matchStatusRule(status) || { tone: STATUS_TONE_POOL[0], group: "applied" };
+    }
+
+    function toneClass(status) {
+      return `status-tone status-tone-${statusMetaOf(status).tone}`;
+    }
+
+    function preferenceIndex(value) {
+      const index = state.data.options.preferences.indexOf(value);
+      return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+    }
+
+    function formatNextDate(record) {
+      if (!record.nextDate) return record.nextNote ? `· ${record.nextNote}` : "";
+      const time = record.nextTime ? ` ${record.nextTime}` : "";
+      const note = record.nextNote ? ` · ${record.nextNote}` : "";
+      return `${record.nextDate}${time}${note}`;
     }
 
     function normalizeTimestamp(value) {
@@ -461,8 +641,9 @@
         "stat-total", "stat-active", "stat-interview", "stat-offer", "search-input", "status-filter", "channel-filter",
         "location-filter", "sort-select", "clear-filter-btn", "table-view-btn", "kanban-view-btn", "settings-btn", "add-btn",
         "empty-state", "empty-open-btn", "table-view", "kanban-view", "application-body", "fallback-file-input", "edit-dialog",
-        "application-form", "edit-dialog-title", "record-id", "company-input", "role-input", "location-input", "applied-date-input",
-        "channel-input", "status-input", "next-date-input", "url-input", "notes-input", "form-error", "settings-dialog",
+        "application-form", "edit-dialog-title", "record-id", "company-input", "role-input", "preference-input", "location-input",
+        "applied-date-input", "channel-input", "status-input", "next-date-input", "next-time-input", "next-note-input",
+        "url-input", "notes-input", "form-error", "settings-dialog",
         "settings-body", "replace-dialog", "replace-form", "replace-description", "replacement-select", "replace-cancel-btn", "toast-stack"
       ].forEach(id => els[id] = $(id));
     }
@@ -700,11 +881,14 @@
       els["record-id"].value = record?.id || "";
       els["company-input"].value = record?.company || "";
       els["role-input"].value = record?.role || "";
+      els["preference-input"].value = record?.preference || "";
       els["location-input"].value = record?.location || state.data.options.locations[0] || "";
       els["applied-date-input"].value = record?.appliedDate || today();
       els["channel-input"].value = record?.channel || state.data.options.channels[0] || "";
       els["status-input"].value = record?.status || state.data.options.statuses[0] || "";
       els["next-date-input"].value = record?.nextDate || "";
+      els["next-time-input"].value = record?.nextTime || "";
+      els["next-note-input"].value = record?.nextNote || "";
       els["url-input"].value = record?.url || "";
       els["notes-input"].value = record?.notes || "";
       els["edit-dialog"].showModal();
@@ -729,6 +913,12 @@
           return;
         }
       }
+      const nextDate = els["next-date-input"].value;
+      const nextTime = normalizeTime(els["next-time-input"].value);
+      if (nextTime && !nextDate) {
+        els["form-error"].textContent = "填写下一步时间前，请先选择下一步日期。";
+        return;
+      }
 
       const id = els["record-id"].value;
       const existing = state.data.applications.find(item => item.id === id);
@@ -737,11 +927,14 @@
         id: existing?.id || uid(),
         company,
         role,
+        preference: els["preference-input"].value,
         location: els["location-input"].value,
         appliedDate: els["applied-date-input"].value,
         channel: els["channel-input"].value,
         status: els["status-input"].value,
-        nextDate: els["next-date-input"].value,
+        nextDate,
+        nextTime,
+        nextNote: cleanText(els["next-note-input"].value, 60),
         url,
         notes: cleanText(els["notes-input"].value, 2000),
         createdAt: existing?.createdAt || now,
@@ -790,6 +983,7 @@
       fillSelect(els["status-input"], state.data.options.statuses);
       fillSelect(els["channel-input"], state.data.options.channels);
       fillSelect(els["location-input"], state.data.options.locations);
+      fillSelect(els["preference-input"], state.data.options.preferences, "未指定志愿");
     }
 
     function fillSelect(select, values, firstLabel = "", preserve = false) {
@@ -802,11 +996,11 @@
 
     function renderStats() {
       const records = state.data.applications;
-      const inactive = new Set(["Offer", "已拒绝", "已结束"]);
+      const inactive = new Set(["offer", "rejected", "closed"]);
       els["stat-total"].textContent = records.length;
-      els["stat-active"].textContent = records.filter(item => !inactive.has(item.status)).length;
-      els["stat-interview"].textContent = records.filter(item => /面/.test(item.status)).length;
-      els["stat-offer"].textContent = records.filter(item => item.status === "Offer").length;
+      els["stat-active"].textContent = records.filter(item => !inactive.has(statusMetaOf(item.status).group)).length;
+      els["stat-interview"].textContent = records.filter(item => statusMetaOf(item.status).group === "interview").length;
+      els["stat-offer"].textContent = records.filter(item => statusMetaOf(item.status).group === "offer").length;
     }
 
     function filteredRecords() {
@@ -815,7 +1009,7 @@
       const channel = els["channel-filter"].value;
       const location = els["location-filter"].value;
       const records = state.data.applications.filter(item => {
-        const haystack = `${item.company} ${item.role} ${item.notes}`.toLocaleLowerCase("zh-CN");
+        const haystack = `${item.company} ${item.role} ${item.notes} ${item.nextNote} ${item.preference}`.toLocaleLowerCase("zh-CN");
         return (!query || haystack.includes(query)) && (!status || item.status === status) && (!channel || item.channel === channel) && (!location || item.location === location);
       });
       const sort = els["sort-select"].value;
@@ -850,58 +1044,140 @@
       renderKanban(records);
     }
 
+    function groupByCompany(records) {
+      const groups = new Map();
+      records.forEach(record => {
+        const key = record.company.trim() || record.company;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(record);
+      });
+      return [...groups.values()].map(items => ({
+        company: items[0].company,
+        items: items.slice().sort((a, b) =>
+          preferenceIndex(a.preference) - preferenceIndex(b.preference)
+          || (b.appliedDate || "").localeCompare(a.appliedDate || ""))
+      }));
+    }
+
+    function createGroupRow(group) {
+      const tr = document.createElement("tr");
+      tr.className = "group-row";
+      const td = document.createElement("td");
+      td.colSpan = 10;
+      const head = document.createElement("div");
+      head.className = "group-head";
+      const name = document.createElement("strong");
+      name.textContent = group.company;
+      const count = document.createElement("span");
+      count.className = "count";
+      count.textContent = `${group.items.length} 条`;
+      head.append(name, count);
+      td.append(head);
+      tr.append(td);
+      return tr;
+    }
+
+    function nextStepCell(record) {
+      const td = document.createElement("td");
+      td.className = "cell-muted next-cell";
+      if (!record.nextDate) {
+        td.textContent = record.nextNote ? `· ${record.nextNote}` : "—";
+        return td;
+      }
+      const main = document.createElement("span");
+      main.textContent = record.nextTime ? `${record.nextDate} ${record.nextTime}` : record.nextDate;
+      td.append(main);
+      if (record.nextNote) {
+        const note = document.createElement("span");
+        note.className = "next-note";
+        note.textContent = ` · ${record.nextNote}`;
+        td.append(note);
+      }
+      return td;
+    }
+
+    function createRecordRow(record) {
+      const tr = document.createElement("tr");
+      tr.className = "record-row";
+
+      const companyTd = document.createElement("td");
+      companyTd.className = "company-cell";
+      const company = document.createElement("div");
+      company.className = "company-name";
+      company.textContent = record.company;
+      const role = document.createElement("div");
+      role.className = "role-name";
+      role.textContent = record.role;
+      companyTd.append(company, role);
+      tr.append(companyTd);
+
+      const prefTd = document.createElement("td");
+      if (record.preference) {
+        const chip = document.createElement("span");
+        chip.className = "chip chip-pref";
+        chip.textContent = record.preference;
+        prefTd.append(chip);
+      } else prefTd.textContent = "—";
+      tr.append(prefTd);
+
+      tr.append(textCell(record.location || "—", "cell-muted"));
+      tr.append(textCell(record.appliedDate || "—", "cell-muted"));
+      tr.append(textCell(record.channel || "—"));
+
+      const statusTd = document.createElement("td");
+      const statusSelect = document.createElement("select");
+      statusSelect.className = `inline-select ${toneClass(record.status)}`;
+      statusSelect.setAttribute("aria-label", `${record.company}的进展`);
+      state.data.options.statuses.forEach(value => statusSelect.append(new Option(value, value)));
+      statusSelect.value = record.status;
+      statusSelect.addEventListener("change", () => updateApplicationStatus(record.id, statusSelect.value));
+      statusTd.append(statusSelect);
+      tr.append(statusTd);
+
+      tr.append(nextStepCell(record));
+
+      const notesTd = document.createElement("td");
+      notesTd.className = "notes-cell";
+      if (record.notes) {
+        const text = document.createElement("div");
+        text.className = "notes-text";
+        text.textContent = record.notes;
+        notesTd.title = record.notes;
+        notesTd.append(text);
+      } else {
+        notesTd.className = "notes-cell cell-muted";
+        notesTd.textContent = "—";
+      }
+      tr.append(notesTd);
+
+      const linkTd = document.createElement("td");
+      if (record.url) {
+        const link = document.createElement("a");
+        link.className = "link";
+        link.href = record.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "打开 ↗";
+        linkTd.append(link);
+      } else linkTd.textContent = "—";
+      tr.append(linkTd);
+
+      const actionTd = document.createElement("td");
+      const actions = document.createElement("div");
+      actions.className = "row-actions";
+      const edit = actionButton("编辑", () => openEditDialog(record));
+      const remove = actionButton("删除", () => deleteApplication(record.id), true);
+      actions.append(edit, remove);
+      actionTd.append(actions);
+      tr.append(actionTd);
+      return tr;
+    }
+
     function renderTable(records) {
       els["application-body"].replaceChildren();
-      records.forEach(record => {
-        const tr = document.createElement("tr");
-
-        const companyTd = document.createElement("td");
-        companyTd.className = "company-cell";
-        const company = document.createElement("div");
-        company.className = "company-name";
-        company.textContent = record.company;
-        const role = document.createElement("div");
-        role.className = "role-name";
-        role.textContent = record.role;
-        companyTd.append(company, role);
-        tr.append(companyTd);
-
-        tr.append(textCell(record.location || "—", "cell-muted"));
-        tr.append(textCell(record.appliedDate || "—", "cell-muted"));
-        tr.append(textCell(record.channel || "—"));
-
-        const statusTd = document.createElement("td");
-        const statusSelect = document.createElement("select");
-        statusSelect.className = "inline-select";
-        statusSelect.setAttribute("aria-label", `${record.company}的进展`);
-        state.data.options.statuses.forEach(value => statusSelect.append(new Option(value, value)));
-        statusSelect.value = record.status;
-        statusSelect.addEventListener("change", () => updateApplicationStatus(record.id, statusSelect.value));
-        statusTd.append(statusSelect);
-        tr.append(statusTd);
-
-        tr.append(textCell(record.nextDate || "—", "cell-muted"));
-        const linkTd = document.createElement("td");
-        if (record.url) {
-          const link = document.createElement("a");
-          link.className = "link";
-          link.href = record.url;
-          link.target = "_blank";
-          link.rel = "noopener noreferrer";
-          link.textContent = "打开 ↗";
-          linkTd.append(link);
-        } else linkTd.textContent = "—";
-        tr.append(linkTd);
-
-        const actionTd = document.createElement("td");
-        const actions = document.createElement("div");
-        actions.className = "row-actions";
-        const edit = actionButton("编辑", () => openEditDialog(record));
-        const remove = actionButton("删除", () => deleteApplication(record.id), true);
-        actions.append(edit, remove);
-        actionTd.append(actions);
-        tr.append(actionTd);
-        els["application-body"].append(tr);
+      groupByCompany(records).forEach(group => {
+        els["application-body"].append(createGroupRow(group));
+        group.items.forEach(record => els["application-body"].append(createRecordRow(record)));
       });
     }
 
@@ -913,6 +1189,7 @@
         const head = document.createElement("div");
         head.className = "kanban-head";
         const title = document.createElement("span");
+        title.className = `tone-text status-tone-${statusMetaOf(status).tone}`;
         title.textContent = status;
         const statusRecords = records.filter(item => item.status === status);
         const count = document.createElement("span");
@@ -938,16 +1215,22 @@
       role.textContent = record.role;
       const meta = document.createElement("div");
       meta.className = "job-meta";
-      [record.location, record.appliedDate].filter(Boolean).forEach(text => {
+      const chips = [];
+      if (record.preference) chips.push({ text: record.preference, className: "chip chip-pref" });
+      if (record.location) chips.push({ text: record.location, className: "chip" });
+      if (record.appliedDate) chips.push({ text: record.appliedDate, className: "chip" });
+      const nextStep = formatNextDate(record);
+      if (nextStep) chips.push({ text: nextStep, className: "chip" });
+      chips.forEach(item => {
         const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = text;
+        chip.className = item.className;
+        chip.textContent = item.text;
         meta.append(chip);
       });
       const footer = document.createElement("div");
       footer.className = "job-card-footer";
       const select = document.createElement("select");
-      select.className = "inline-select";
+      select.className = `inline-select ${toneClass(record.status)}`;
       select.setAttribute("aria-label", `${record.company}的进展`);
       state.data.options.statuses.forEach(value => select.append(new Option(value, value)));
       select.value = record.status;
@@ -1001,9 +1284,10 @@
     function renderSettings() {
       els["settings-body"].replaceChildren();
       const definitions = [
-        { key: "statuses", title: "进展阶段", hint: "顺序即看板列顺序" },
+        { key: "statuses", title: "进展阶段", hint: "顺序即看板列顺序，颜色自动匹配" },
         { key: "channels", title: "投递渠道", hint: "用于表单和筛选" },
-        { key: "locations", title: "工作地点", hint: "用于表单和筛选" }
+        { key: "locations", title: "工作地点", hint: "用于表单和筛选" },
+        { key: "preferences", title: "志愿", hint: "同一公司多岗位的志愿顺序" }
       ];
       definitions.forEach(definition => {
         const section = document.createElement("section");
@@ -1124,7 +1408,7 @@
     }
 
     function optionField(type) {
-      return { statuses: "status", channels: "channel", locations: "location" }[type];
+      return { statuses: "status", channels: "channel", locations: "location", preferences: "preference" }[type];
     }
 
     function replaceReferences(type, oldValue, newValue) {

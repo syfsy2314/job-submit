@@ -3,3 +3,6 @@ resume.md
 
 # 本地投递记录（包含个人求职信息）
 data/applications.json
+
+# CodeBuddy 本地配置与计划文件
+.codebuddy/

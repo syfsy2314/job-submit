@@ -7,7 +7,9 @@
       "笔试",
       "一面",
       "二面",
+      "三面",
       "HR 面",
+      "终面",
       "Offer",
       "已拒绝",
       "已结束"
@@ -34,6 +36,12 @@
       "苏州",
       "远程",
       "其他"
+    ],
+    "preferences": [
+      "第一志愿",
+      "第二志愿",
+      "第三志愿",
+      "服从调剂"
     ]
   },
   "applications": [
@@ -41,15 +49,52 @@
       "id": "example-application-001",
       "company": "示例科技",
       "role": "前端开发工程师",
+      "preference": "第一志愿",
       "location": "上海",
       "appliedDate": "2026-09-01",
       "channel": "官网",
-      "status": "已投递",
-      "nextDate": "2026-09-08",
+      "status": "二面",
+      "nextDate": "2026-09-22",
+      "nextTime": "14:00",
+      "nextNote": "二面",
       "url": "https://example.com/careers/frontend",
-      "notes": "这是一条演示记录，复制模板后可以编辑或删除。",
+      "notes": "这是一条演示记录，复制模板后可以编辑或删除。备注较长时表格中会截断显示，鼠标悬停可以看全文。",
       "createdAt": "2026-09-01T02:00:00.000Z",
-      "updatedAt": "2026-09-01T02:00:00.000Z"
+      "updatedAt": "2026-09-20T02:00:00.000Z"
+    },
+    {
+      "id": "example-application-002",
+      "company": "示例科技",
+      "role": "后端开发工程师",
+      "preference": "第二志愿",
+      "location": "上海",
+      "appliedDate": "2026-09-02",
+      "channel": "内推",
+      "status": "笔试",
+      "nextDate": "2026-09-25",
+      "nextTime": "",
+      "nextNote": "在线笔试",
+      "url": "",
+      "notes": "同公司的第二条记录，表格中会与上一条归到同一个公司分组下，并按志愿顺序排列。",
+      "createdAt": "2026-09-02T02:00:00.000Z",
+      "updatedAt": "2026-09-18T02:00:00.000Z"
+    },
+    {
+      "id": "example-application-003",
+      "company": "演示网络",
+      "role": "算法工程师",
+      "preference": "",
+      "location": "远程",
+      "appliedDate": "2026-09-05",
+      "channel": "Boss 直聘",
+      "status": "已投递",
+      "nextDate": "",
+      "nextTime": "",
+      "nextNote": "",
+      "url": "",
+      "notes": "",
+      "createdAt": "2026-09-05T02:00:00.000Z",
+      "updatedAt": "2026-09-05T02:00:00.000Z"
     }
   ]
 }
