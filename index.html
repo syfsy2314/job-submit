@@ -158,13 +158,15 @@
 
     .content-area { min-height: 360px; }
     .table-wrap { width: 100%; overflow-x: auto; }
-    table { width: 100%; border-collapse: collapse; min-width: 1240px; }
+    table { width: 100%; border-collapse: collapse; min-width: 1360px; }
     th { padding: 12px 14px; color: var(--muted); background: var(--surface-2); font-size: 12px; text-align: left; white-space: nowrap; font-weight: 600; }
     td { padding: 13px 14px; border-top: 1px solid var(--border); vertical-align: middle; }
     tbody tr:hover { background: color-mix(in srgb, var(--primary-soft) 40%, transparent); }
-    .company-cell { min-width: 160px; }
-    .company-name { font-weight: 700; }
-    .role-name { color: var(--muted); margin-top: 2px; font-size: 13px; }
+    .company-cell { min-width: 130px; max-width: 200px; border-right: 1px solid var(--border); background: color-mix(in srgb, var(--primary-soft) 40%, var(--surface)); }
+    .company-name { font-weight: 700; overflow-wrap: anywhere; }
+    .role-cell { min-width: 180px; max-width: 280px; }
+    .role-name { position: relative; padding-left: 16px; overflow-wrap: anywhere; }
+    .role-name::before { content: ""; position: absolute; left: -14px; top: .75em; width: 22px; border-top: 1px solid var(--border); }
     .cell-muted { color: var(--muted); white-space: nowrap; }
     .next-cell { min-width: 165px; }
     .next-note { color: var(--muted); }
@@ -197,17 +199,7 @@
     .status-tone-fuchsia { --tone: var(--tone-fuchsia); }
     .status-tone-purple { --tone: var(--tone-purple); }
 
-    tr.group-row td {
-      padding: 10px 14px;
-      border-top: 1px solid var(--border);
-      background: color-mix(in srgb, var(--primary-soft) 58%, var(--surface));
-    }
-    tr.group-row:first-child td { border-top: 0; }
-    tr.group-row:hover td { background: color-mix(in srgb, var(--primary-soft) 58%, var(--surface)); }
-    .group-head { display: flex; align-items: center; gap: 9px; }
-    .group-head strong { font-size: 14px; }
-    .group-head .count { background: var(--surface); }
-    tr.record-row td:first-child { box-shadow: inset 3px 0 0 color-mix(in srgb, var(--primary) 28%, transparent); }
+    tr.company-start:not(:first-child) > td { border-top: 2px solid var(--border); }
     .chip.chip-pref { background: color-mix(in srgb, var(--tone-teal) 14%, transparent); color: var(--tone-teal); }
     .link { color: var(--primary); text-decoration: none; font-weight: 600; }
     .link:hover { text-decoration: underline; }
@@ -361,7 +353,7 @@
           <table>
             <thead>
               <tr>
-                <th>公司 / 岗位</th><th>志愿</th><th>地点</th><th>投递日期</th><th>渠道</th><th>进展</th><th>下一步</th><th>备注</th><th>链接</th><th>操作</th>
+                <th>公司</th><th>岗位</th><th>志愿</th><th>地点</th><th>投递日期</th><th>渠道</th><th>进展</th><th>下一步</th><th>备注</th><th>链接</th><th>操作</th>
               </tr>
             </thead>
             <tbody id="application-body"></tbody>
@@ -1059,22 +1051,15 @@
       }));
     }
 
-    function createGroupRow(group) {
-      const tr = document.createElement("tr");
-      tr.className = "group-row";
+    function createCompanyCell(group) {
       const td = document.createElement("td");
-      td.colSpan = 10;
-      const head = document.createElement("div");
-      head.className = "group-head";
-      const name = document.createElement("strong");
+      td.className = "company-cell";
+      td.rowSpan = group.items.length;
+      const name = document.createElement("div");
+      name.className = "company-name";
       name.textContent = group.company;
-      const count = document.createElement("span");
-      count.className = "count";
-      count.textContent = `${group.items.length} 条`;
-      head.append(name, count);
-      td.append(head);
-      tr.append(td);
-      return tr;
+      td.append(name);
+      return td;
     }
 
     function nextStepCell(record) {
@@ -1100,16 +1085,13 @@
       const tr = document.createElement("tr");
       tr.className = "record-row";
 
-      const companyTd = document.createElement("td");
-      companyTd.className = "company-cell";
-      const company = document.createElement("div");
-      company.className = "company-name";
-      company.textContent = record.company;
+      const roleTd = document.createElement("td");
+      roleTd.className = "role-cell";
       const role = document.createElement("div");
       role.className = "role-name";
       role.textContent = record.role;
-      companyTd.append(company, role);
-      tr.append(companyTd);
+      roleTd.append(role);
+      tr.append(roleTd);
 
       const prefTd = document.createElement("td");
       if (record.preference) {
@@ -1176,8 +1158,14 @@
     function renderTable(records) {
       els["application-body"].replaceChildren();
       groupByCompany(records).forEach(group => {
-        els["application-body"].append(createGroupRow(group));
-        group.items.forEach(record => els["application-body"].append(createRecordRow(record)));
+        group.items.forEach((record, index) => {
+          const row = createRecordRow(record);
+          if (index === 0) {
+            row.classList.add("company-start");
+            row.prepend(createCompanyCell(group));
+          }
+          els["application-body"].append(row);
+        });
       });
     }
 
