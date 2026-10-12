@@ -328,6 +328,8 @@
           <option value="updated-desc">最近更新</option>
           <option value="applied-desc">投递日期 ↓</option>
           <option value="applied-asc">投递日期 ↑</option>
+          <option value="status-asc">进展 ↑</option>
+          <option value="status-desc">进展 ↓</option>
           <option value="company-asc">公司名称</option>
         </select>
         <button id="clear-filter-btn" class="btn btn-ghost btn-small" type="button">清除筛选</button>
@@ -437,14 +439,17 @@
     // 状态语义色板：tone 决定配色，group 决定统计口径，二者是唯一事实来源。
     const STATUS_RULES = [
       { re: /hr|人力/i, tone: "teal", group: "interview" },
-      { re: /终面|三面|四面|final|总监面|总裁面|boss面/i, tone: "purple", group: "interview" },
+      { re: /三面/, tone: "rose", group: "interview" },
+      { re: /终面|四面|final|总监面|总裁面|boss面/i, tone: "purple", group: "interview" },
       { re: /二面|复试|复面/, tone: "orange", group: "interview" },
       { re: /一面|初面|群面/, tone: "amber", group: "interview" },
+      { re: /ai\s*面/i, tone: "blue", group: "applied" },
       { re: /面/, tone: "amber", group: "interview" },
       { re: /笔试|测评|机试|笔|测/, tone: "indigo", group: "written" },
       { re: /offer|录用|意向/i, tone: "green", group: "offer" },
       { re: /拒|未通过|挂|淘汰|感谢信/, tone: "red", group: "rejected" },
-      { re: /结束|放弃|终止|关闭/, tone: "zinc", group: "closed" },
+      { re: /结束/, tone: "sky", group: "closed" },
+      { re: /放弃|终止|关闭/, tone: "zinc", group: "closed" },
       { re: /待投|待申请|未投/, tone: "gray", group: "pending" },
       { re: /已投|投递|已申请|申请中/, tone: "slate", group: "applied" }
     ];
@@ -613,6 +618,11 @@
 
     function preferenceIndex(value) {
       const index = state.data.options.preferences.indexOf(value);
+      return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+    }
+
+    function statusIndex(status) {
+      const index = state.data.options.statuses.indexOf(status);
       return index === -1 ? Number.MAX_SAFE_INTEGER : index;
     }
 
@@ -1008,6 +1018,11 @@
       return records.sort((a, b) => {
         if (sort === "applied-desc") return (b.appliedDate || "").localeCompare(a.appliedDate || "");
         if (sort === "applied-asc") return (a.appliedDate || "9999").localeCompare(b.appliedDate || "9999");
+        if (sort === "status-asc" || sort === "status-desc") {
+          const stage = sort === "status-asc" ? 1 : -1;
+          return stage * (statusIndex(a.status) - statusIndex(b.status))
+            || (b.appliedDate || "").localeCompare(a.appliedDate || "");
+        }
         if (sort === "company-asc") return a.company.localeCompare(b.company, "zh-CN");
         return b.updatedAt.localeCompare(a.updatedAt);
       });
